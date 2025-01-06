@@ -1,34 +1,31 @@
-name: CI
+name: Node CI
 
 on:
   push:
-    branches: [ master ]
-
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
-    if: github.ref == 'refs/heads/master'
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
       - uses: actions/checkout@v4
-
-      - run: npm ci
-      - run: npm run build
-
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@5.1
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          switches: -avzr --delete
-          path: ./*
-          remote_path: /ANOUT24_D02_COMPASSCAR_PRIME_NODE
-          remote_host: <host>.compute.amazonaws.com
-          remote_user: ec2-user
-          remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          node-version: '20.x'
+      - name: Install npm dependencies
+        run: npm install
+      - name: Run build task
+        run: npm run build --if-present
+      - name: rsync deployments
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: "ec2-18-116-51-162.us-east-2.compute.amazonaws.com"
+          REMOTE_USER: "ec2-user"
+          TARGET: "/home/ec2-user/ANOUT24_D02_COMPASSCAR_PRIME_NODE"
+          EXCLUDE: "/dist/, /node_modules/"
