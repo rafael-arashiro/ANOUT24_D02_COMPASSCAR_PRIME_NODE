@@ -112,7 +112,7 @@ export class OrderBuilder {
     const zeroDate = new Date(
       `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
     );
-
+    //
     if (!this._props.initialDate) {
       throw new Error('Order initial date is required');
     }
