@@ -21,7 +21,9 @@ export class UpdateUserUseCase {
   ) {}
 
   async execute(id: string, dto: UpdateUserDto): Promise<UpdateUserDto> {
-    const user = await this.userRepository.userExists(dto.email);
+    // const user = await this.userRepository.userExists(dto.email);
+
+    const user = await this.userRepository.findId(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
