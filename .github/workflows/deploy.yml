@@ -15,22 +15,6 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          envkey_POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          envkey_POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          envkey_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          envkey_JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
-          envkey_DEFAULT_USER_NAME: ${{ secrets.DEFAULT_USER_NAME }}
-          envkey_DEFAULT_USER_EMAIL: ${{ secrets.DEFAULT_USER_EMAIL }}
-          envkey_DEFAULT_USER_PASSWORD: ${{ secrets.DEFAULT_USER_PASSWORD }}
-          envkey_POSTGRES_DB_TEST: ${{ secrets.POSTGRES_DB_TEST }}
-          envkey_POSTGRES_USER_TEST: ${{ secrets.POSTGRES_USER_TEST }}
-          envkey_POSTGRES_PASSWORD_TEST: ${{ secrets.POSTGRES_PASSWORD_TEST }}
-
       - name: Run build task
         run: npm run build --if-present
 
