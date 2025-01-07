@@ -15,6 +15,22 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file@v1
+        with:
+          ENV_POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          ENV_POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          ENV_POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          ENV_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          ENV_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ENV_JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          ENV_DEFAULT_USER_NAME: ${{ secrets.DEFAULT_USER_NAME }}
+          ENV_DEFAULT_USER_EMAIL: ${{ secrets.DEFAULT_USER_EMAIL }}
+          ENV_DEFAULT_USER_PASSWORD: ${{ secrets.DEFAULT_USER_PASSWORD }}
+          ENV_POSTGRES_DB_TEST: ${{ secrets.POSTGRES_DB_TEST }}
+          ENV_POSTGRES_USER_TEST: ${{ secrets.POSTGRES_USER_TEST }}
+          ENV_POSTGRES_PASSWORD_TEST: ${{ secrets.POSTGRES_PASSWORD_TEST }}
+
       - name: Run build task
         run: npm run build --if-present
 
