@@ -112,7 +112,21 @@ export class OrderBuilder {
     const zeroDate = new Date(
       `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
     );
-    //
+
+    const initialDate = new Date(this._props.initialDate);
+    const zeroInitialDate = new Date(
+      `${initialDate.getFullYear()}-${initialDate.getMonth() + 1}-${initialDate.getDate() + 1}`,
+    );
+
+    const finalDate = new Date(this._props.finalDate);
+    const zeroFinalDate = new Date(
+      `${finalDate.getFullYear()}-${finalDate.getMonth() + 1}-${finalDate.getDate() + 1}`,
+    );
+
+    console.log(zeroDate);
+    console.log(zeroInitialDate);
+    console.log(zeroFinalDate);
+
     if (!this._props.initialDate) {
       throw new Error('Order initial date is required');
     }
@@ -128,9 +142,9 @@ export class OrderBuilder {
       throw new Error('Order client id is required');
     }
     if (
-      !(new Date(this._props.initialDate) >= zeroDate) ||
-      !(new Date(this._props.finalDate) >= zeroDate) ||
-      !(new Date(this._props.finalDate) >= new Date(this._props.initialDate))
+      !(zeroInitialDate >= zeroDate) ||
+      !(zeroFinalDate >= zeroDate) ||
+      !(zeroFinalDate >= zeroInitialDate)
     ) {
       throw new InvalidDateException();
     }
