@@ -1,30 +1,28 @@
-# name: deploy
-# on: push
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Get code
-#         uses: actions/checkout@v4
+name: Deploy to EC2
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checar o repositório
+        uses: actions/checkout@v4
 
-#       - name: Install Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '20.x'
+      - name: Configurar SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-#       - name: Install npm dependencies
-#         run: npm install
-
-#       - name: Run build task
-#         run: npm run build --if-present
-
-#       - name: Copy files with SSH
-#         uses: easingthemes/ssh-deploy@main
-#         with:
-#           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-#           ARGS: '-rlgoDzvc -i --delete'
-#           SOURCE: 'dist/'
-#           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-#           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-#           TARGET: '/home/ec2-user/ANOUT24_D02_COMPASSCAR_PRIME_NODE/dist'
-#           EXCLUDE: '/dist/, /node_modules/'
+      - name: Conectar à instância EC2 e rodar o deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
+            cd /home/ec2-user/ANOUT24_D02_COMPASSCAR_PRIME_NODE || exit
+            git pull origin main || exit
+            rafael-arashiro || exit
+            ${{ secrets.GIT_TOKEN }}|| exit
+            npm install || exit
+            npm run build || exit
+            pm2 restart node-api-compasscar || pm2 start dist/main.js --name "node-api-compasscar"
+          EOF
