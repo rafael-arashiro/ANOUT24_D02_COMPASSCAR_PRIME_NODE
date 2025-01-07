@@ -19,10 +19,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
             cd /home/ec2-user/ANOUT24_D02_COMPASSCAR_PRIME_NODE || exit
-            git config --global user.name "Your GitHub Username"
-            git config --global user.email "your-email@example.com"
-            git pull https://github.com/rafael-arashiro/ANOUT24_D02_COMPASSCAR_PRIME_NODE main || exit
-            git pull https://$GH_TOKEN@github.com/rafael-arashiro/ANOUT24_D02_COMPASSCAR_PRIME_NODE main || exit
+            git pull https://$GH_TOKEN@github.com/rafael-arashiro/ANOUT24_D02_COMPASSCAR_PRIME_NODE.git main || exit
             npm install || exit
             npm run build || exit
             pm2 restart node-api-compasscar || pm2 start dist/main.js --name "node-api-compasscar"
